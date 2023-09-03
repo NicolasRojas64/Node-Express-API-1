@@ -1,21 +1,26 @@
 const express = require('express');
 const app = express();
 
-app.use(express.json())
 
 //Middleware, manejador de peticiones
-function logger(req,res,next){
-    
-}
+// function logger(req,res,next){
+//     console.log(`Request received: ${req.protocol}// ${req.get('host')}`);
+//     next();
+// }
+//app.use(logger)
 
+//Middleware con módulo morgan
+const morgan = require('morgan');
+app.use(morgan('dev'));
+
+app.use(express.json())
+
+//Routes
 app.all("/user", (req,res,next)=>{
     console.log("Usarios");
     next();
 })
 
-app.get("/", (req, res) => {
-    res.send("<h1>Puerto 5000<h1/>");
-})
 
 app.get("/user", (req,res) =>{
     res.json({
@@ -33,6 +38,9 @@ app.post("/user/:id", (req,res)=>{
 app.delete( '/delete', (req, res) => {
     res.send("DELETE METHOD")
 })
+
+//Middleware static
+app.use(express.static('public'))
 
 app.listen(5000, () => {
     console.log("Server up on port 5000!!!");
