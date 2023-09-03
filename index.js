@@ -13,6 +13,11 @@ const app = express();
 const morgan = require('morgan');
 app.use(morgan('dev'));
 
+//Settings
+app.set("appName", "Express 1");
+app.set("port", 5000)
+app.set("view engine", 'ejs')
+
 app.use(express.json())
 
 //Routes
@@ -21,6 +26,11 @@ app.all("/user", (req,res,next)=>{
     next();
 })
 
+app.get("/", (req, res)=>{
+    const users = [{'name':'Albert'}, {'name':'Pedro'}, {'name':'Fiona'}]
+    //Manejador de plantillas EJS 
+    res.render('index.ejs', {people: users})
+})
 
 app.get("/user", (req,res) =>{
     res.json({
@@ -42,7 +52,8 @@ app.delete( '/delete', (req, res) => {
 //Middleware static
 app.use(express.static('public'))
 
-app.listen(5000, () => {
-    console.log("Server up on port 5000!!!");
+app.listen(app.get('port'), () => {
+    console.log(app.get('appName'))
+    console.log(`Server up on port ${app.get('port')}!!!`);
 })
 
